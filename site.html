@@ -237,7 +237,7 @@
       <div class="subNote" id="dateNote">卒業日：----</div>
 
       <div class="scrollBtn" id="toPage2" role="button" tabindex="0">
-        <span class="arrow">↓</span><span>スクロールして次へ</span>
+        
       </div>
     </div>
   </section>
@@ -257,16 +257,39 @@
     </div>
 
     <div class="scrollBtn" id="toPage3" role="button" tabindex="0" style="margin-top:18px;">
-      <span class="arrow">↓</span><span>最後の動画へ</span>
+     
     </div>
   </section>
 
   <!-- 3ページ目（動画フルスクリーン） -->
   <section class="page videoPage" id="page3">
     <div class="videoWrap">
-      <video id="bgVideo" playsinline muted loop controls>
-        <source src="bg.mp4" type="video/mp4" />
-      </video>
+      <video id="bgVideo" autoplay muted loop playsinline preload="auto">
+  <source src="bg.mp4" type="video/mp4">
+</video>
+#bgVideo{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+
+  /* 操作不可 */
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+const v = document.getElementById("bgVideo");
+if (v) {
+  v.controls = false;
+  v.disablePictureInPicture = true;
+  v.setAttribute("controlsList", "nodownload noplaybackrate noremoteplayback");
+}
+
+#bgVideo::-webkit-media-controls{ display:none !important; }
+#bgVideo::-webkit-media-controls-enclosure{ display:none !important; }
+
     </div>
   </section>
 
