@@ -1,97 +1,59 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Wrong</title>
   <style>
-    html,body{height:100%;margin:0;background:#000;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;}
-    /* 画像をフルスクリーン */
+    html,body{height:100%}
+    body{margin:0; overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","Yu Gothic","Meiryo",sans-serif;}
     .bg{
       position:fixed; inset:0;
-      background:url("wrong.jpg") center/cover no-repeat;
+      background:url("wrong.jpg") center / cover no-repeat;
     }
-    /* うっすら暗くして文字・ボタンを見やすく */
-    .shade{
+    .overlay{
       position:fixed; inset:0;
-      background:linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.55));
+      background:linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.35));
+      display:grid;
+      place-items:end center;
+      padding:28px 18px;
+      box-sizing:border-box;
     }
-    .ui{
-      position:fixed; inset:0;
-      display:grid; place-items:end center;
-      padding:28px;
-      gap:12px;
-      pointer-events:none;
-    }
-    .panel{
-      pointer-events:auto;
-      width:min(520px,92vw);
-      background:rgba(255,255,255,.88);
+    .card{
+      width:min(760px,92vw);
+      border-radius:22px;
+      background:rgba(255,255,255,.82);
       backdrop-filter:blur(10px);
-      border-radius:18px;
-      padding:16px 16px 14px;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);
+      box-shadow:0 22px 60px rgba(0,0,0,.25);
+      padding:18px 16px;
       text-align:center;
     }
-    .msg{margin:0 0 10px;font-weight:800;color:#222;}
-    button{
-      height:46px; padding:0 18px;
-      border:none; border-radius:999px;
-      background:#ff6b9a; color:#fff;
-      font-weight:900; cursor:pointer;
-      box-shadow:0 12px 28px rgba(255,107,154,.35);
+    .title{margin:4px 0 10px; font-weight:900; letter-spacing:.08em;}
+    .btn{
+      border:none; border-radius:14px;
+      padding:12px 16px;
+      font-weight:900;
+      cursor:pointer;
+      background:linear-gradient(180deg,#ff77a7,#ff4f86);
+      color:#fff;
+      box-shadow:0 18px 40px rgba(255,79,134,.28);
+      width:min(280px,80vw);
     }
-    .hint{margin:10px 0 0;font-size:12px;opacity:.75;}
-/* ====== 全端末対応の土台 ====== */
-* { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
-img, video { max-width: 100%; height: auto; display: block; }
-
-/* iPhoneのアドレスバー問題対策：100svh を優先 */
-.fullscreen {
-  min-height: 100vh;
-  min-height: 100svh;
-  min-height: 100dvh;
-  width: 100%;
-  display: grid;
-  place-items: center;
-  padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
-}
-
-/* 中身のカードがデカすぎて途切れないように */
-.card {
-  width: min(920px, 92vw);
-  border-radius: 24px;
-}
-
-/* 文字が端末に合わせて伸び縮みする */
-.title {
-  font-size: clamp(28px, 6vw, 56px);
-  line-height: 1.15;
-}
-.bigZero {
-  font-size: clamp(72px, 18vw, 180px);
-  line-height: 1;
-}
-
+    .note{margin:10px 0 0; opacity:.75; font-weight:700; font-size:13px;}
   </style>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="shade"></div>
-
-  <div class="ui">
-    <div class="panel">
-      <p class="msg">パスワードが違いました</p>
-      <button id="back">もう一回入力する</button>
-      <p class="hint">ボタンを押して戻ってね</p>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="overlay">
+    <div class="card">
+      <div class="title">パスワードが違います</div>
+      <button class="btn" id="backBtn">もう一度入力する</button>
+      <div class="note">ボタンを押すとロック画面に戻ります</div>
     </div>
   </div>
 
   <script>
-    document.getElementById("back").addEventListener("click", () => {
+    document.getElementById("backBtn").addEventListener("click", ()=>{
       location.href = "index.html";
     });
   </script>

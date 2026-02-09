@@ -1,107 +1,242 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-<meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Graduation Lock</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Graduation</title>
   <style>
-    html,body{height:100%;margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;}
-    body{overflow:hidden;background:#fff;}
-    .sakuraBg{position:fixed;inset:0;
+    :root{
+      --ink:#1b1b1b;
+      --pink:#ff4f86;
+      --card:rgba(255,255,255,.78);
+      --shadow:0 25px 70px rgba(0,0,0,.16);
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic","Meiryo",sans-serif;
+      color:var(--ink);
+      overflow:hidden; /* ★ ロック中はスクロールさせない */
+      background:#fff;
+    }
+    a{color:inherit}
+
+    /* 桜っぽい背景（全体） */
+    .sakuraBg{
+      position:fixed; inset:0;
       background:
         radial-gradient(1200px 600px at 20% 10%, rgba(255,214,225,.55), transparent 60%),
         radial-gradient(900px 600px at 90% 20%, rgba(255,200,220,.35), transparent 60%),
         radial-gradient(900px 700px at 40% 90%, rgba(190,225,255,.35), transparent 65%),
         linear-gradient(180deg,#fff6f9,#f6fbff);
-      z-index:-2;}
-    .wrap{position:fixed;inset:0;display:grid;place-items:center;padding:24px;}
-    .card{width:min(820px,92vw);background:rgba(255,255,255,.80);backdrop-filter:blur(12px);
-      border-radius:22px;padding:34px 28px;box-shadow:0 25px 70px rgba(0,0,0,.18);text-align:center;}
-    .badge{display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.06);
-      font-size:12px;letter-spacing:.12em;margin-bottom:12px;}
-    .title{font-size:46px;margin:10px 0 8px;}
-    .sub{margin:0 0 18px;opacity:.8;}
-    form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px;}
-    input{width:min(520px,62vw);height:46px;border-radius:12px;border:1px solid rgba(0,0,0,.12);padding:0 14px;font-size:16px;outline:none;}
-    button{height:46px;padding:0 18px;border:none;border-radius:12px;background:#ff6b9a;color:#fff;font-weight:800;cursor:pointer;
-      box-shadow:0 10px 25px rgba(255,107,154,.35);}
-    .err{height:22px;margin:12px 0 0;color:#d6455d;font-weight:700;}
-    .hint{margin-top:10px;font-size:12px;opacity:.75;}
-    .shake{animation:shake .32s ease;}
-    @keyframes shake{0%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-8px)}80%{transform:translateX(8px)}100%{transform:translateX(0)}}
-/* ====== 全端末対応の土台 ====== */
-* { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
-img, video { max-width: 100%; height: auto; display: block; }
+      z-index:-3;
+    }
+    .sakuraBg::after{
+      content:"";
+      position:absolute; inset:0;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,170,190,.25) 0 2px, transparent 3px),
+        radial-gradient(circle at 25% 35%, rgba(255,170,190,.18) 0 2px, transparent 3px),
+        radial-gradient(circle at 70% 25%, rgba(255,170,190,.18) 0 2px, transparent 3px),
+        radial-gradient(circle at 85% 40%, rgba(255,170,190,.22) 0 2px, transparent 3px),
+        radial-gradient(circle at 40% 75%, rgba(255,170,190,.18) 0 2px, transparent 3px),
+        radial-gradient(circle at 60% 85%, rgba(255,170,190,.22) 0 2px, transparent 3px);
+      background-size:260px 260px;
+      filter:blur(.2px);
+      z-index:-2;
+    }
 
-/* iPhoneのアドレスバー問題対策：100svh を優先 */
-.fullscreen {
-  min-height: 100vh;
-  min-height: 100svh;
-  min-height: 100dvh;
-  width: 100%;
-  display: grid;
-  place-items: center;
-  padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
-}
+    /* ロック画面 */
+    #lock{
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      padding:32px 16px;
+      position:relative;
+    }
+    .lockCard{
+      width:min(920px,92vw);
+      border-radius:28px;
+      background:var(--card);
+      backdrop-filter:blur(12px);
+      box-shadow:var(--shadow);
+      padding:28px 22px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(0,0,0,.06);
+      font-size:12px;
+      letter-spacing:.12em;
+      font-weight:900;
+    }
+    .badge .dot{
+      width:10px;height:10px;border-radius:50%;
+      background:linear-gradient(180deg,#ff9db7,#ff4f86);
+      box-shadow:0 8px 18px rgba(255,79,134,.35);
+    }
+    .lockTitle{
+      margin:18px 0 6px;
+      font-size:clamp(26px,4.4vw,44px);
+      font-weight:900;
+      letter-spacing:.06em;
+    }
+    .lockSub{
+      margin:0 0 18px;
+      opacity:.8;
+      font-weight:700;
+    }
+    .lockForm{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .pw{
+      width:min(420px,74vw);
+      height:46px;
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.10);
+      padding:0 14px;
+      font-size:16px;
+      outline:none;
+      background:rgba(255,255,255,.92);
+    }
+    .btn{
+      height:46px;
+      border:none;
+      border-radius:14px;
+      padding:0 18px;
+      font-weight:900;
+      letter-spacing:.08em;
+      cursor:pointer;
+      color:#fff;
+      background:linear-gradient(180deg,#ff77a7,#ff4f86);
+      box-shadow:0 18px 40px rgba(255,79,134,.28);
+    }
+    .err{
+      margin:12px 0 0;
+      min-height:1.4em;
+      color:#b00020;
+      font-weight:900;
+    }
+    .hint{
+      margin-top:14px;
+      font-size:13px;
+      opacity:.75;
+      font-weight:700;
+    }
 
-/* 中身のカードがデカすぎて途切れないように */
-.card {
-  width: min(920px, 92vw);
-  border-radius: 24px;
-}
+    /* 揺れ */
+    .shake{ animation:shake .38s ease; }
+    @keyframes shake{
+      0%{transform:translateX(0)}
+      20%{transform:translateX(-10px)}
+      40%{transform:translateX(10px)}
+      60%{transform:translateX(-7px)}
+      80%{transform:translateX(7px)}
+      100%{transform:translateX(0)}
+    }
 
-/* 文字が端末に合わせて伸び縮みする */
-.title {
-  font-size: clamp(28px, 6vw, 56px);
-  line-height: 1.15;
-}
-.bigZero {
-  font-size: clamp(72px, 18vw, 180px);
-  line-height: 1;
-}
-
+    /* ふわっと花びら（ロック画面だけ） */
+    .petals{
+      position:absolute; inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
+    .petal{
+      position:absolute;
+      width:14px; height:10px;
+      background:rgba(255,160,190,.55);
+      border-radius:100% 100% 100% 0;
+      transform:rotate(220deg);
+      filter:blur(.2px);
+      animation:fall linear infinite;
+    }
+    @keyframes fall{
+      from{ transform:translate3d(var(--x), -12vh, 0) rotate(var(--r)); }
+      to{ transform:translate3d(calc(var(--x) + var(--drift)), 110vh, 0) rotate(calc(var(--r) + 220deg)); }
+    }
   </style>
 </head>
 <body>
   <div class="sakuraBg"></div>
 
-  <div class="wrap">
-    <div class="card" id="card">
-      <div class="badge">GRADUATION</div>
-      <h1 class="title">パスワードを入力してください</h1>
-   
+  <section id="lock" aria-label="password">
+    <div class="petals" id="petals"></div>
 
-      <form id="lockForm" autocomplete="off">
-        <input id="pw" type="password" placeholder="Password" required />
-        <button type="submit">入る</button>
+    <div class="lockCard" id="lockCard">
+      <div class="badge"><span class="dot"></span>GRADUATION</div>
+      <h1 class="lockTitle">パスワードを入力してください</h1>
+      <p class="lockSub">卒業おめでとう</p>
+
+      <form id="lockForm" class="lockForm" autocomplete="off">
+        <input id="pw" class="pw" type="password" placeholder="Password" required />
+        <button class="btn" type="submit">入る</button>
       </form>
 
       <p id="err" class="err"></p>
       <div class="hint">※ クラスで共有されたパスワードを入力してください</div>
     </div>
-  </div>
+  </section>
 
   <script>
-    const PASSWORD = "kuwazoe"; // ←ここを変更OK
+    // ====== パスワード設定 ======
+    const PASSWORD = "kuwazoe"; // ←好きなパスワードに変えてOK（半角推奨）
+
+    // ロック中スクロール禁止（スマホの指スクロールも止める）
+    document.addEventListener("touchmove", (e)=>e.preventDefault(), {passive:false});
+
+    // 花びら生成（軽め）
+    const petals = document.getElementById("petals");
+    for(let i=0;i<28;i++){
+      const p=document.createElement("div");
+      p.className="petal";
+      const x = Math.random()*100;
+      p.style.left = x + "vw";
+      p.style.setProperty("--x", x+"vw");
+      p.style.setProperty("--drift", (Math.random()*20-10) + "vw");
+      p.style.setProperty("--r", (Math.random()*360) + "deg");
+      const dur = 8 + Math.random()*10;
+      const delay = -Math.random()*dur;
+      p.style.animationDuration = dur+"s";
+      p.style.animationDelay = delay+"s";
+      p.style.opacity = String(0.45 + Math.random()*0.45);
+      p.style.transform = `scale(${0.7 + Math.random()*0.9}) rotate(220deg)`;
+      petals.appendChild(p);
+    }
+
     const form = document.getElementById("lockForm");
     const pw = document.getElementById("pw");
     const err = document.getElementById("err");
-    const card = document.getElementById("card");
+    const lockCard = document.getElementById("lockCard");
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", (e)=>{
       e.preventDefault();
-      if (pw.value === PASSWORD) {
-        location.href = "site.html";   // 正解→本体
-      } else {
-        err.textContent = "パスワードが違います。";
-        card.classList.remove("shake");
-        void card.offsetWidth;
-        card.classList.add("shake");
-        pw.select();
-        setTimeout(()=> location.href = "wrong.html", 180); // ミス→ミス用サイト
+      const input = (pw.value || "").trim();
+      if(input === PASSWORD){
+        sessionStorage.setItem("passed","yes");
+        // 成功サイトへ
+        location.href = "site.html";
+      }else{
+        // ミスサイトへ
+        sessionStorage.removeItem("passed");
+        location.href = "wrong.html";
+      }
+    });
+
+    // Enterで送信しやすく
+    pw.addEventListener("keydown",(e)=>{
+      if(e.key==="Enter"){
+        // form submit に任せる
       }
     });
   </script>
