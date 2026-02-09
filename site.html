@@ -110,6 +110,37 @@
   pointer-events: none;
   z-index: 9999;
 }
+/* ====== 全端末対応の土台 ====== */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+img, video { max-width: 100%; height: auto; display: block; }
+
+/* iPhoneのアドレスバー問題対策：100svh を優先 */
+.fullscreen {
+  min-height: 100vh;
+  min-height: 100svh;
+  min-height: 100dvh;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
+}
+
+/* 中身のカードがデカすぎて途切れないように */
+.card {
+  width: min(920px, 92vw);
+  border-radius: 24px;
+}
+
+/* 文字が端末に合わせて伸び縮みする */
+.title {
+  font-size: clamp(28px, 6vw, 56px);
+  line-height: 1.15;
+}
+.bigZero {
+  font-size: clamp(72px, 18vw, 180px);
+  line-height: 1;
+}
 
   </style>
 </head>
