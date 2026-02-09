@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Graduation</title>
+
+  <style>
+    :root{
+      --pink:#7a1f3a;
+      --pink2:#ffb7c8;
+      --bg1:#fff0f4;
+      --bg2:#eef6ff;
+      --card: rgba(255,255,255,.72);
+      --stroke: rgba(255,255,255,.85);
+      --shadow: 0 18px 45px rgba(0,0,0,.22);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;
+      color:#1b1b1b;
+      background:#fff;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+
+    /* 桜っぽい薄い背景（全体） */
+    .sakuraBg{
+      position:fixed; inset:0;
+      background:
+        radial-gradient(1200px 700px at 15% 12%, rgba(255, 195, 213, .45), transparent 60%),
+        radial-gradient(1000px 700px at 85% 18%, rgba(255, 210, 225, .35), transparent 60%),
+        radial-gradient(900px 900px at 50% 90%, rgba(210, 230, 255, .40), transparent 65%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      z-index:-3;
+    }
+    .sakuraBg::after{
+      content:"";
+      position:absolute; inset:0;
+      background-image:
+        radial-gradient(circle at 18% 22%, rgba(255,170,190,.22) 0 2px, transparent 3px),
+        radial-gradient(circle at 72% 28%, rgba(255,170,190,.18) 0 2px, transparent 3px),
+        radial-gradient(circle at 44% 63%, rgba(255,170,190,.18) 0 2px, transparent 3px),
+        radial-gradient(circle at 82% 70%, rgba(255,170,190,.22) 0 2px, transparent 3px);
+      background-size: 260px 260px;
+      filter: blur(.2px);
+      z-index:-2;
+    }
+
+    /* 1ページずつ */
+    main{display:block}
+    section{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:32px 16px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* ふわっとカード */
+    .card{
+      width:min(920px, 92vw);
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      border-radius:28px;
+      box-shadow: var(--shadow);
+      border:1px solid rgba(255,255,255,.7);
+      padding:34px 26px;
+      text-align:center;
+    }
+
+    /* ▼ ロック画面 */
+    #lock{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:32px 16px;
+    }
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      border:1px solid rgba(0,0,0,.06);
+      font-size:12px;
+      letter-spacing:.08em;
+      margin-bottom:14px;
+    }
+    .lockTitle{
+      margin:0;
+      font-size:clamp(30px, 4.2vw, 44px);
+      letter-spacing:.06em;
+    }
+    .lockSub{
+      margin:10px 0 22px;
+      opacity:.85;
+    }
+    .lockForm{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:6px;
+    }
+    .pw{
+      width:min(360px, 84vw);
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(0,0,0,.12);
+      padding:0 14px;
+      font-size:16px;
+      outline:none;
+      background:rgba(255,255,255,.9);
+    }
+    .btn{
+      height:44px;
+      padding:0 16px;
+      border:none;
+      border-radius:12px;
+      background: linear-gradient(180deg, #ff8fb0, #ff6e98);
+      color:white;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 12px 26px rgba(255,110,152,.25);
+    }
+    .err{
+      margin:12px 0 0;
+      color:#b00020;
+      min-height:1.2em;
+      font-weight:700;
+    }
+    .hint{
+      margin-top:14px;
+      font-size:12px;
+      opacity:.7;
+    }
+
+    /* 入力ミス時に揺れる */
+    .shake{ animation: shake .36s ease; }
+    @keyframes shake{
+      0%{ transform:translateX(0) }
+      20%{ transform:translateX(-10px) }
+      40%{ transform:translateX(10px) }
+      60%{ transform:translateX(-6px) }
+      80%{ transform:translateX(6px) }
+      100%{ transform:translateX(0) }
+    }
+
+    /* ▼ 1枚目(カウントダウン) */
+    .heroSmall{
+      margin:0;
+      font-size:12px;
+      letter-spacing:.18em;
+      opacity:.75;
+    }
+    .heroLine{
+      margin:10px 0 10px;
+      font-size:clamp(18px, 2.6vw, 24px);
+      letter-spacing:.10em;
+      opacity:.92;
+    }
+    .bigZeroWrap{
+      display:flex;
+      justify-content:center;
+      align-items:baseline;
+      gap:10px;
+      margin:10px 0 0;
+      flex-wrap:wrap;
+    }
+    .bigZero{
+      font-size:clamp(96px, 16vw, 210px);
+      font-weight:900;
+      letter-spacing:.02em;
+      color:var(--pink);
+      /* 濃くするための影（白縁取りは入れない） */
+      text-shadow: 0 18px 46px rgba(0,0,0,.32);
+      line-height:1;
+    }
+    .dayLabel{
+      font-size:clamp(28px, 4vw, 44px);
+      font-weight:800;
+      color:var(--pink);
+      opacity:.92;
+    }
+    .subNote{
+      margin:12px 0 0;
+      opacity:.75;
+      font-size:14px;
+    }
+
+    /* スクロール誘導 */
+    .scrollHint{
+      margin-top:22px;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      border:1px solid rgba(0,0,0,.06);
+      cursor:pointer;
+      user-select:none;
+    }
+    .arrow{
+      display:inline-block;
+      width:10px; height:10px;
+      border-right:2px solid rgba(0,0,0,.55);
+      border-bottom:2px solid rgba(0,0,0,.55);
+      transform:rotate(45deg);
+      animation:bounce 1.2s ease-in-out infinite;
+    }
+    @keyframes bounce{
+      0%,100%{ transform:translateY(0) rotate(45deg) }
+      50%{ transform:translateY(6px) rotate(45deg) }
+    }
+
+    /* ▼ 2枚目（画像） */
+    .photo{
+      width:min(1100px, 96vw);
+      aspect-ratio: 16/9;
+      border-radius:28px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.7);
+      overflow:hidden;
+      background:#000;
+    }
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    /* ▼ 3枚目（動画） */
+    .videoWrap{
+      width:min(1100px, 96vw);
+      aspect-ratio: 16/9;
+      border-radius:28px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,.7);
+      overflow:hidden;
+      background:#000;
+      position:relative;
+    }
+    .videoWrap video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    /* 動画が「無音で自動再生」だと気づけるように小さく表示 */
+    .videoHint{
+      position:absolute;
+      left:14px; bottom:14px;
+      padding:8px 10px;
+      border-radius:12px;
+      background:rgba(255,255,255,.78);
+      font-size:12px;
+      border:1px solid rgba(0,0,0,.06);
+    }
+
+    /* 紙吹雪（成功時） */
+    canvas#fx{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:9999;
+    }
+/* ===== 全画面動画 ===== */
+.videoFull{
+  position: relative;
+  min-height: 100vh;
+  padding: 0;
+  display: block;
+}
+
+.videoFull video{
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;   /* 画面いっぱいにする */
+  background: #000;
+}
+
+/* ヒント表示は前面に */
+.videoFull .videoHint{
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 2;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.75);
+  font-size: 12px;
+}
+/* ロック中はスクロール禁止にするためのクラス */
+body.locked {
+  overflow: hidden !important;
+  height: 100vh;
+}
+
+/* ロック画面を常に最前面に固定 */
+#lock {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+}
+
+/* ロック解除後は消す */
+#lock[hidden] {
+  display: none !important;
+}
+
+/* 本体はロック解除まで見えない */
+#app[hidden] {
+  display: none !important;
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="sakuraBg" aria-hidden="true"></div>
+  <canvas id="fx"></canvas>
+
+  <!-- ▼ ロック画面 -->
+  <section id="lock" aria-label="password">
+    <div class="card" id="lockCard">
+      <div class="badge">GRADUATION</div>
+      <h1 class="lockTitle">パスワードを入力してください</h1>
+      
+
+      <form id="lockForm" class="lockForm" autocomplete="off">
+        <input id="pw" class="pw" type="password" placeholder="Password" required />
+        <button class="btn" type="submit">入る</button>
+      </form>
+
+      <p id="err" class="err"></p>
+      <div class="hint">※ クラスで共有されたパスワードを入力してください</div>
+    </div>
+  </section>
+
+  <!-- ▼ 本体（正解後に表示） -->
+  <main id="app" hidden>
+    <!-- 1枚目：カウントダウン -->
+    <section id="page1">
+      <div class="card">
+        <p class="heroSmall">GRADUATION COUNTDOWN</p>
+        <p class="heroLine">卒業まで、、、あと</p>
+
+        <div class="bigZeroWrap">
+          <div class="bigZero" id="daysLeft">0</div>
+          <div class="dayLabel">日</div>
+        </div>
+
+        <p class="subNote" id="dateNote"></p>
+
+        <div class="scrollHint" id="toPhotoBtn" role="button" tabindex="0" aria-label="次へ">
+          <span class="arrow" aria-hidden="true"></span>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- 2枚目：画像 -->
+    <section id="page2">
+      <div class="photo">
+        <img src="main.jpg" alt="memories" />
+      </div>
+
+      <div class="scrollHint" id="toVideoBtn" role="button" tabindex="0" aria-label="動画へ" style="margin-top:22px;">
+        <span class="arrow" aria-hidden="true"></span>
+        
+      </div>
+    </section>
+
+    <!-- 3枚目：動画（ここが今回のメイン） -->
+    <!-- 3枚目：全画面動画 -->
+<section id="page3" class="videoFull">
+  <video id="bgVideo"
+    src="bg.mp4"
+    playsinline
+    muted
+    loop
+    preload="auto"
+    controls
+  ></video>
+
+ 
+</section>
+
+  </main>
+
+  <script>
+    // ========= 設定 =========
+    const PASSWORD = "kuwazoekeisyu"; // ←ここを好きなパスワードに変更OK
+
+    // 卒業日（必要なら変更）
+    // 例：2026-03-01 なら "2026-03-01"
+    const GRAD_DATE = "2026-03-11";
+
+    // ========= 要素 =========
+    const lock = document.getElementById("lock");
+    const app  = document.getElementById("app");
+    const form = document.getElementById("lockForm");
+    const pw   = document.getElementById("pw");
+    const err  = document.getElementById("err");
+    const lockCard = document.getElementById("lockCard");
+
+    const daysLeftEl = document.getElementById("daysLeft");
+    const dateNote = document.getElementById("dateNote");
+
+    const toPhotoBtn = document.getElementById("toPhotoBtn");
+    const toVideoBtn = document.getElementById("toVideoBtn");
+
+    const page2 = document.getElementById("page2");
+    const page3 = document.getElementById("page3");
+    const video = document.getElementById("bgVideo");
+
+    // ========= カウントダウン =========
+    function calcDaysLeft(){
+      const today = new Date();
+      const grad = new Date(GRAD_DATE + "T00:00:00");
+      const diff = grad.getTime() - today.getTime();
+      const days = Math.ceil(diff / (1000*60*60*24));
+      return days;
+    }
+    function updateCountdown(){
+      const d = calcDaysLeft();
+      daysLeftEl.textContent = String(Math.max(0, d));
+      dateNote.textContent = `卒業日：${GRAD_DATE}`;
+    }
+    updateCountdown();
+
+    // ========= スクロール誘導 =========
+    function scrollToEl(el){
+      el.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+    toPhotoBtn.addEventListener("click", ()=>scrollToEl(page2));
+    toPhotoBtn.addEventListener("keydown", (e)=>{ if(e.key==="Enter") scrollToEl(page2); });
+
+    toVideoBtn.addEventListener("click", ()=>scrollToEl(page3));
+    toVideoBtn.addEventListener("keydown", (e)=>{ if(e.key==="Enter") scrollToEl(page3); });
+
+    // ========= ロック処理 =========
+    app.hidden = true;
+
+    form.addEventListener("submit", (e)=>{
+      e.preventDefault();
+      const input = pw.value;
+
+      if(input === PASSWORD){
+        // ロック解除
+        lock.style.display = "none";
+        app.hidden = false;
+
+        // 紙吹雪
+        burstConfetti();
+
+        // すぐ動画ページへ飛ばしたいならコメント外す
+        // scrollToEl(page3);
+
+        // 自動再生（ブラウザ都合で失敗することがあるので try）
+        safePlayVideo();
+
+      }else{
+        err.textContent = "パスワードが違います。もう一度入力してください。";
+        lockCard.classList.remove("shake");
+        void lockCard.offsetWidth; // リセット
+        lockCard.classList.add("shake");
+        pw.select();
+      }
+    });
+
+    // ========= 動画を「表示されない」を避ける鉄板処理 =========
+    // 1) まずは読み込み
+    video.addEventListener("error", ()=>{
+      console.log("Video error:", video.error);
+    });
+
+    // 2) 画面に入ったら再生（自動再生が失敗しても、ユーザー操作で再生できるように controls もON）
+    const io = new IntersectionObserver((entries)=>{
+      for(const ent of entries){
+        if(ent.isIntersecting){
+          safePlayVideo();
+        }
+      }
+    }, {threshold: 0.35});
+    io.observe(page3);
+
+    function safePlayVideo(){
+      // autoplay制限があるので、mutedのまま再生を試す
+      video.muted = true;
+      const p = video.play();
+      if(p && typeof p.catch === "function"){
+        p.catch(()=>{ /* 失敗してもOK：controlsで手動再生できる */ });
+      }
+    }
+
+    // ========= 紙吹雪 =========
+    const fx = document.getElementById("fx");
+    const ctx = fx.getContext("2d");
+
+    function resizeFx(){
+      fx.width = window.innerWidth * devicePixelRatio;
+      fx.height = window.innerHeight * devicePixelRatio;
+      fx.style.width = window.innerWidth + "px";
+      fx.style.height = window.innerHeight + "px";
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    }
+    window.addEventListener("resize", resizeFx);
+    resizeFx();
+
+    let confetti = [];
+    function burstConfetti(){
+      confetti = [];
+      const n = 160;
+      for(let i=0;i<n;i++){
+        confetti.push({
+          x: window.innerWidth/2 + (Math.random()-0.5)*80,
+          y: window.innerHeight*0.35 + (Math.random()-0.5)*60,
+          vx:(Math.random()-0.5)*7,
+          vy:(Math.random()*-6)-3,
+          r: 2 + Math.random()*4,
+          a: 1,
+          g: 0.18 + Math.random()*0.08
+        });
+      }
+      animateConfetti();
+      setTimeout(()=>{ confetti = []; ctx.clearRect(0,0,window.innerWidth,window.innerHeight); }, 2500);
+    }
+
+    function animateConfetti(){
+      if(confetti.length===0) return;
+      ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+
+      for(const p of confetti){
+        p.vy += p.g;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.a *= 0.992;
+
+        ctx.globalAlpha = Math.max(0, p.a);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(animateConfetti);
+    }
+  </script>
+</body>
+</html>

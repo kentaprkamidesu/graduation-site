@@ -1,0 +1,306 @@
+ <!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+<!-- 🔒 ロックチェック（ここに貼る） -->
+  <script>
+   if (input === PASSWORD) {
+  sessionStorage.setItem("passed", "yes");
+  location.href = "site.html";
+}
+
+  </script>
+  <title>Graduation</title>
+  
+<style>
+    html,body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;}
+    section{min-height:100vh;display:grid;place-items:center;position:relative;overflow:hidden;}
+
+    /* ===== 背景：桜っぽい淡いデザイン ===== */
+    .sakuraBg{
+      position:absolute; inset:0; z-index:0;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(255,214,225,.60), transparent 60%),
+        radial-gradient(900px 650px at 90% 20%, rgba(255,200,220,.40), transparent 60%),
+        radial-gradient(950px 750px at 40% 95%, rgba(190,225,255,.35), transparent 65%),
+        linear-gradient(180deg,#fff6f9,#f6fbff);
+    }
+    .sakuraBg::after{
+      content:""; position:absolute; inset:0;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,170,190,.25) 0 2px, transparent 3px),
+        radial-gradient(circle at 25% 35%, rgba(255,170,190,.18) 0 2px, transparent 3px),
+        radial-gradient(circle at 70% 25%, rgba(255,170,190,.18) 0 2px, transparent 3px),
+        radial-gradient(circle at 85% 40%, rgba(255,170,190,.22) 0 2px, transparent 3px),
+        radial-gradient(circle at 40% 75%, rgba(255,170,190,.18) 0 2px, transparent 3px),
+        radial-gradient(circle at 60% 85%, rgba(255,170,190,.22) 0 2px, transparent 3px);
+      background-size:260px 260px;
+      filter:blur(.2px);
+      opacity:.9;
+    }
+
+    /* ===== 花びら ===== */
+    #petals{position:absolute; inset:0; z-index:1; pointer-events:none;}
+    .petal{
+      position:absolute;
+      width:14px;height:10px;
+      background:rgba(255,160,190,.7);
+      border-radius:100% 100% 100% 0;
+      transform:rotate(20deg);
+      filter:blur(.15px);
+      opacity:.9;
+      animation:fall linear infinite;
+    }
+    @keyframes fall{
+      from{transform:translate3d(var(--x), -12vh, 0) rotate(var(--r));}
+      to{transform:translate3d(calc(var(--x) + var(--drift)), 110vh, 0) rotate(calc(var(--r) + 220deg));}
+    }
+
+    /* ===== 1ページ目（カウントダウン） ===== */
+    .heroCard{
+      position:relative; z-index:2;
+      width:min(980px,92vw);
+      background:rgba(255,255,255,.70);
+      backdrop-filter:blur(12px);
+      border-radius:26px;
+      padding:34px 26px;
+      box-shadow:0 25px 70px rgba(0,0,0,.16);
+      text-align:center;
+    }
+    .mini{display:inline-block;padding:8px 14px;border-radius:999px;background:rgba(0,0,0,.06);font-size:12px;letter-spacing:.12em;}
+    .line{margin:14px 0 8px;font-size:clamp(22px,3.2vw,34px);font-weight:900;color:#222;}
+    .bigZeroWrap{display:flex;justify-content:center;align-items:baseline;gap:10px;margin-top:10px;}
+    .bigZero{font-size:clamp(120px,16vw,240px);font-weight:1000;line-height:1;color:#ff4f86;
+      text-shadow:0 2px 0 rgba(255,255,255,.9),0 18px 45px rgba(0,0,0,.22);}
+    .dayLabel{font-size:clamp(26px,4vw,46px);font-weight:900;color:#333;}
+    .subNote{margin:10px 0 0;opacity:.8;font-weight:700;}
+    .scrollBtn{
+      margin-top:18px; display:inline-flex; gap:10px; align-items:center;
+      padding:12px 18px;border-radius:999px;background:rgba(255,255,255,.85);
+      border:1px solid rgba(0,0,0,.08);
+      cursor:pointer; user-select:none;
+      box-shadow:0 14px 40px rgba(0,0,0,.12);
+      font-weight:900;
+    }
+    .arrow{font-size:18px; transform:translateY(1px);}
+
+    /* ===== 2ページ目（main.jpg） ===== */
+    .congrats::before{
+      content:""; position:absolute; inset:0;
+      background:url("main.jpg") center/cover no-repeat;
+      opacity:1; z-index:0;
+    }
+    .congrats h1{
+      position:relative; z-index:1; margin:0;
+      font-size:clamp(64px,9vw,160px);
+      font-weight:900;color:#8b2f49;
+      text-shadow:0 2px 0 rgba(255,255,255,.9),0 14px 36px rgba(0,0,0,.28);
+      letter-spacing:.06em;
+    }
+
+    /* ===== 3ページ目（動画フルスクリーン） ===== */
+    .videoPage{background:#000;}
+    .videoWrap{position:absolute; inset:0;}
+    .videoWrap video{position:absolute; inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+#confetti{
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+  </style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+  <!-- 1ページ目：卒業までカウント -->
+  <section id="top">
+    <div class="sakuraBg"></div>
+    <div id="petals"></div>
+
+    <div class="heroCard">
+      <div class="mini">GRADUATION COUNTDOWN</div>
+      <div class="line">卒業まで、、、あと</div>
+
+      <div class="bigZeroWrap">
+        <div class="bigZero" id="daysLeft">0</div>
+        <div class="dayLabel">日</div>
+      </div>
+
+      <div class="subNote" id="dateNote"></div>
+
+      <div class="scrollBtn" id="toCongrats" tabindex="0">
+        <span class="arrow">↓</span><span>スクロールして次へ</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2ページ目：卒業おめでとう画像 -->
+  <section class="congrats" id="page2">
+   
+  </section>
+
+  <!-- 3ページ目：動画フルスクリーン -->
+  <section class="videoPage" id="page3">
+    <div class="videoWrap">
+      <video id="bgVideo" src="bg.mp4" autoplay muted loop playsinline></video>
+    </div>
+  </section>
+
+  <script>
+
+    // ===== カウントダウン（0日で固定でもOK。卒業日を入れるならここだけ変える）=====
+    const GRAD_DATE = "2026-03-11"; // ←卒業日を入れる（例）。0固定にしたいなら下の行を daysLeft=0 にしてOK
+
+    function calcDaysLeft(){
+      const today = new Date();
+      const grad = new Date(GRAD_DATE + "T00:00:00");
+      const diff = grad.getTime() - today.getTime();
+      return Math.max(0, Math.ceil(diff / (1000*60*60*24)));
+    }
+    const days = calcDaysLeft();
+    document.getElementById("daysLeft").textContent = String(days);
+    document.getElementById("dateNote").textContent = `卒業日：${GRAD_DATE}`;
+
+    // ===== ボタンで次へ =====
+    const toCongrats = document.getElementById("toCongrats");
+    function scrollToEl(id){
+      document.getElementById(id).scrollIntoView({behavior:"smooth", block:"start"});
+    }
+    toCongrats.addEventListener("click", ()=>scrollToEl("page2"));
+    toCongrats.addEventListener("keydown", (e)=>{ if(e.key==="Enter") scrollToEl("page2"); });
+
+    // ===== 花びら生成 =====
+    const petals = document.getElementById("petals");
+    const n = 26;
+    for(let i=0;i<n;i++){
+      const p = document.createElement("div");
+      p.className = "petal";
+      const x = Math.random()*100;
+      const drift = (Math.random()*2-1)*20 + "vw";
+      const r = (Math.random()*360) + "deg";
+      const dur = 7 + Math.random()*8;
+      const delay = Math.random()*dur;
+
+      p.style.setProperty("--x", x+"vw");
+      p.style.setProperty("--drift", drift);
+      p.style.setProperty("--r", r);
+      p.style.animationDuration = dur+"s";
+      p.style.animationDelay = delay+"s";
+      p.style.left = x+"vw";
+      petals.appendChild(p);
+    }
+
+    // ===== 動画自動再生保険 =====
+    const v = document.getElementById("bgVideo");
+    if (v) {
+      v.muted = true;
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(()=>{});
+    }
+// ===== 入場クラッカー（左右の斜めから）=====
+(function confettiBurst(){
+  const canvas = document.getElementById("confetti");
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+
+  function resize(){
+    canvas.width = Math.floor(window.innerWidth * devicePixelRatio);
+    canvas.height = Math.floor(window.innerHeight * devicePixelRatio);
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  const W = () => window.innerWidth;
+  const H = () => window.innerHeight;
+
+  const pieces = [];
+  const countPerSide = 120; // 量（増やすと豪華）
+
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+
+  function addSide(side){ // side: "L" or "R"
+    for(let i=0;i<countPerSide;i++){
+      const fromLeft = side==="L";
+      const x = fromLeft ? -20 : W()+20;
+      const y = rand(H()*0.35, H()*0.75);
+
+      // 斜め上方向に飛ばす（左右反転）
+      const vx = fromLeft ? rand(6, 11) : rand(-11, -6);
+      const vy = rand(-10, -5); // 上に
+      const spin = rand(-0.25,0.25);
+
+      pieces.push({
+        x, y,
+        vx, vy,
+        g: rand(0.12,0.18),
+        w: rand(6,12),
+        h: rand(8,16),
+        a: rand(0, Math.PI*2),
+        va: spin,
+        life: rand(90, 150),
+        opacity: 1
+      });
+    }
+  }
+
+  // 左右から同時発射
+  addSide("L");
+  addSide("R");
+
+  let frame = 0;
+  function tick(){
+    frame++;
+    ctx.clearRect(0,0,W(),H());
+
+    for(let i=pieces.length-1;i>=0;i--){
+      const p = pieces[i];
+
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.g;
+      p.a += p.va;
+
+      // 後半で少しずつ消える
+      if(p.life < 40) p.opacity = p.life / 40;
+
+      // 色（桜系＋白＋ゴールドっぽい）
+      // ※色を指定しないと“それっぽさ”が出にくいのでここだけ指定してる
+      const palette = ["#ff6b9a","#ffd1dc","#ffffff","#ffe6a7","#ff9ec4","#bfe3ff"];
+      const c = palette[i % palette.length];
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, Math.min(1, p.opacity));
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.a);
+      ctx.fillStyle = c;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+
+      p.life--;
+      if(p.life <= 0 || p.y > H()+60) pieces.splice(i,1);
+    }
+
+    // だいたい2秒で終わる感じ
+    if(pieces.length > 0 && frame < 220){
+      requestAnimationFrame(tick);
+    }else{
+      // 終わったらキャンバス消して軽くする
+      ctx.clearRect(0,0,W(),H());
+      canvas.style.display = "none";
+    }
+  }
+  tick();
+})();
+
+  </script>
+
+</body>
+
+
+</html>
