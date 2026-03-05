@@ -11,16 +11,17 @@
       --card:rgba(255,255,255,.70);
       --shadow:0 25px 70px rgba(0,0,0,.16);
     }
+    *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic","Meiryo",sans-serif;
+      font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","Yu Gothic","Meiryo",sans-serif;
       color:var(--ink);
       overflow-x:hidden;
       background:#fff;
     }
 
-    /* 背景 */
+    /* 背景（桜っぽい） */
     .sakuraBg{
       position:fixed; inset:0;
       background:
@@ -34,7 +35,7 @@
       content:"";
       position:absolute; inset:0;
       background-image:
-        radial-gradient(circle at 10% 20%, rgba(255,170,190,.25) 0 2px, transparent 3px),
+        radial-gradient(circle at 10% 20%, rgba(255,170,190,.24) 0 2px, transparent 3px),
         radial-gradient(circle at 25% 35%, rgba(255,170,190,.18) 0 2px, transparent 3px),
         radial-gradient(circle at 70% 25%, rgba(255,170,190,.18) 0 2px, transparent 3px),
         radial-gradient(circle at 85% 40%, rgba(255,170,190,.22) 0 2px, transparent 3px),
@@ -45,27 +46,27 @@
       z-index:-2;
     }
 
-    /* 3ページ縦スクロール：スマホでも安定 */
+    /* 3ページ縦スクロール */
     .page{
       min-height:100svh;
       display:grid;
       place-items:center;
       padding:28px 16px;
-      box-sizing:border-box;
       position:relative;
     }
 
-    /* 1ページ目（カウント） */
+    /* 1ページ目：カウント */
     .heroCard{
-      position:relative;
-      z-index:2;
       width:min(980px,92vw);
       background:var(--card);
       backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
       border-radius:26px;
       padding:34px 26px;
       box-shadow:var(--shadow);
       text-align:center;
+      position:relative;
+      z-index:2;
     }
     .mini{
       display:inline-block;
@@ -74,12 +75,12 @@
       background:rgba(0,0,0,.06);
       font-size:12px;
       letter-spacing:.12em;
-      font-weight:900;
+      font-weight:1000;
     }
     .heroLine{
       margin:14px 0 8px;
       font-size:clamp(20px,3.2vw,34px);
-      font-weight:900;
+      font-weight:1000;
       letter-spacing:.06em;
     }
     .bigZeroWrap{
@@ -98,13 +99,13 @@
     }
     .dayLabel{
       font-size:clamp(26px,4vw,48px);
-      font-weight:900;
+      font-weight:1000;
       opacity:.95;
     }
     .subNote{
       margin:10px 0 0;
       opacity:.8;
-      font-weight:700;
+      font-weight:900;
     }
     .scrollBtn{
       margin-top:18px;
@@ -117,12 +118,12 @@
       border:1px solid rgba(0,0,0,.08);
       cursor:pointer;
       user-select:none;
-      font-weight:900;
+      font-weight:1000;
       box-shadow:0 14px 40px rgba(0,0,0,.12);
     }
     .arrow{font-size:18px; transform:translateY(1px);}
 
-    /* 2ページ目：横スワイプ写真 */
+    /* 2ページ目：横スワイプ写真（白枠/文字なし） */
     .galleryWrap{
       width:min(1100px,94vw);
       border-radius:28px;
@@ -130,74 +131,53 @@
       box-shadow:var(--shadow);
       background:rgba(255,255,255,.55);
       backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
     }
     .gallery{
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-}
-
-.slide{
-  flex: 0 0 100%;
-  scroll-snap-align: start;
-}
-
+      display:flex;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      scrollbar-width:none;
+      scroll-behavior:smooth;
+      touch-action: pan-y; /* 縦スクロールは生かす */
     }
     .gallery::-webkit-scrollbar{display:none;}
     .slide{
-      scroll-snap-align:center;
+      scroll-snap-align:start;
       flex:0 0 100%;
-      aspect-ratio: 16 / 9;
-      min-height:min(70vh,520px);
+      height:min(74vh,560px);
       position:relative;
-      background:#eee center/cover no-repeat;
+      background:#000 center/cover no-repeat;
     }
-    .slide::after{
-      content:"";
-      position:absolute; inset:0;
-      background:linear-gradient(180deg, rgba(0,0,0,.00), rgba(0,0,0,.20));
-      pointer-events:none;
-    }
-    .namePlate{
-      position:absolute;
-      left:clamp(16px,3vw,28px);
-      top:clamp(16px,3vw,28px);
-      max-width:min(520px,88vw);
-      border-radius:22px;
-      padding:18px 18px;
-      background:rgba(255,255,255,.82);
-      backdrop-filter:blur(10px);
-      box-shadow:0 18px 50px rgba(0,0,0,.18);
-    }
-    .jpSmall{font-size:clamp(14px,2.2vw,18px); opacity:.8; font-weight:800; letter-spacing:.08em;}
-    .jpName{margin:6px 0 6px; font-size:clamp(26px,4.4vw,44px); font-weight:1000; letter-spacing:.06em;}
-    .enName{font-size:clamp(14px,2.2vw,18px); opacity:.75; font-weight:800; letter-spacing:.16em;}
     .hintSwipe{
       text-align:center;
       padding:12px 14px;
-      font-weight:900;
+      font-weight:1000;
       letter-spacing:.08em;
-      opacity:.78;
+      opacity:.75;
       font-size:13px;
       border-top:1px solid rgba(0,0,0,.06);
     }
 
-    /* 3ページ目：動画フルスクリーン */
+    /* 3ページ目：動画フルスクリーン（音なし・自動再生・操作不可） */
     .videoPage{padding:0; background:#000;}
-    .videoWrap{
-      position:absolute; inset:0;
-    }
-    .videoWrap video{
+    .videoWrap{position:absolute; inset:0;}
+    #bgVideo{
       position:absolute; inset:0;
       width:100%;
       height:100%;
       object-fit:cover;
       display:block;
       background:#000;
+      pointer-events:none; /* 操作不可 */
+      user-select:none;
+      -webkit-user-select:none;
     }
+    #bgVideo::-webkit-media-controls{ display:none !important; }
+    #bgVideo::-webkit-media-controls-enclosure{ display:none !important; }
 
-    /* 紙吹雪（入場エフェクト） */
+    /* 紙吹雪キャンバス */
     #confetti{
       position:fixed;
       inset:0;
@@ -208,19 +188,18 @@
       display:none;
     }
 
-    /* 画像が見つからない時の表示 */
+    /* 画像が読めないとき用（保険） */
     .missing{
-      position:absolute;
-      inset:0;
-      display:grid;
-      place-items:center;
-      color:#000;
+      position:absolute; inset:0;
+      display:grid; place-items:center;
+      color:#111;
       font-weight:1000;
       letter-spacing:.08em;
       background:repeating-linear-gradient(45deg,#fff,#fff 10px,#f3f3f3 10px,#f3f3f3 20px);
     }
   </style>
 </head>
+
 <body>
   <div class="sakuraBg"></div>
   <canvas id="confetti"></canvas>
@@ -237,27 +216,24 @@
       <div class="subNote" id="dateNote">卒業日：----</div>
 
       <div class="scrollBtn" id="toPage2" role="button" tabindex="0">
-        
+        <span class="arrow">↓</span><span>スクロールして写真へ</span>
       </div>
     </div>
   </section>
-//-----------------------------------------------------------------------------------
-  <!-- 2ページ目（横スワイプ写真） -->
+
+  <!-- 2ページ目（横スワイプ写真） -->#---------------------------------------------------------------------
   <section class="page" id="page2">
     <div class="galleryWrap">
       <div class="gallery" id="gallery">
         <div class="slide" id="slide1"></div>
         <div class="slide" id="slide2"></div>
         <div class="slide" id="slide3"></div>
-        <div class="slide" id="slide4"></div>
-        <div class="slide" id="slide5"></div>
-
       </div>
       <div class="hintSwipe">← 横にスワイプすると写真が切り替わる →</div>
     </div>
 
     <div class="scrollBtn" id="toPage3" role="button" tabindex="0" style="margin-top:18px;">
-     
+      <span class="arrow">↓</span><span>最後へ</span>
     </div>
   </section>
 
@@ -265,54 +241,29 @@
   <section class="page videoPage" id="page3">
     <div class="videoWrap">
       <video id="bgVideo" autoplay muted loop playsinline preload="auto">
-  <source src="bg.mp4" type="video/mp4">
-</video>
-#bgVideo{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-
-  /* 操作不可 */
-  pointer-events:none;
-  user-select:none;
-  -webkit-user-select:none;
-}
-const v = document.getElementById("bgVideo");
-if (v) {
-  v.controls = false;
-  v.disablePictureInPicture = true;
-  v.setAttribute("controlsList", "nodownload noplaybackrate noremoteplayback");
-}
-
-#bgVideo::-webkit-media-controls{ display:none !important; }
-#bgVideo::-webkit-media-controls-enclosure{ display:none !important; }
-
+        <source src="bg.mp4" type="video/mp4" />
+      </video>
     </div>
   </section>
 
   <script>
-    // ===== ロックチェック（site.html直開き対策） =====
+    // ===== site.html 直開き対策（パス未通過なら戻す）=====
     if (sessionStorage.getItem("passed") !== "yes") {
       location.href = "index.html";
     }
 
-    // ===== 卒業日 =====
-    const GRAD_DATE = "2026-03-11"; // 変えるならここだけ
+    // ===== 卒業日（ここだけ変更OK）=====
+    const GRAD_DATE = "2026-03-11";
+
     function calcDaysLeft(){
-      const today = new Date();
-      const grad  = new Date(GRAD_DATE + "T00:00:00");
-      const diff  = grad.getTime() - today.getTime();
-      const days  = Math.ceil(diff / (1000*60*60*24));
+      const now = new Date();
+      const grad = new Date(GRAD_DATE + "T00:00:00");
+      const diff = grad.getTime() - now.getTime();
+      const days = Math.ceil(diff / (1000*60*60*24));
       return Math.max(0, days);
     }
-    function updateCountdown(){
-      document.getElementById("daysLeft").textContent = String(calcDaysLeft());
-      document.getElementById("dateNote").textContent = "卒業日： " + GRAD_DATE;
-    }
-    updateCountdown();
+    document.getElementById("daysLeft").textContent = String(calcDaysLeft());
+    document.getElementById("dateNote").textContent = "卒業日： " + GRAD_DATE;
 
     // ===== スクロール誘導 =====
     const page2 = document.getElementById("page2");
@@ -322,136 +273,138 @@ if (v) {
 
     document.getElementById("toPage3").addEventListener("click", ()=>page3.scrollIntoView({behavior:"smooth"}));
     document.getElementById("toPage3").addEventListener("keydown", (e)=>{ if(e.key==="Enter") page3.scrollIntoView({behavior:"smooth"}); });
-//===========================================================================================================================
-    // ===== 写真が消えないように：画像の存在チェックして確実に背景へ反映 
-    const images = ["main.jpg","main2.jpg","main3.jpg","main4.jpg","main5.jpg"];
-const slides = [
-  document.getElementById("slide1"),
-  document.getElementById("slide2"),
-  document.getElementById("slide3"),
-  document.getElementById("slide4"),
-  document.getElementById("slide5"),
-];
 
+    // ===== 写真：背景に確実にセット（ファイル名はこの配列だけ）=====#-------------------------------------------------------------------------------------------------------------
+    // 追加したい時はここに "main4.jpg" みたいに増やす
+    const images = ["main.jpg","main2.jpg","main3.jpg"];
+    const slides = [
+      document.getElementById("slide1"),
+      document.getElementById("slide2"),
+      document.getElementById("slide3")
+    ];
 
     function setSlideBackground(slideEl, filename){
       const img = new Image();
-      img.onload = ()=>{
-        slideEl.style.backgroundImage = `url("${filename}")`;
-      };
-      img.onerror = ()=>{
-        slideEl.innerHTML += `<div class="missing">画像が見つからない：${filename}</div>`;
-      };
-      img.src = filename + "?v=" + Date.now(); // キャッシュ事故を避ける
+      img.onload = ()=>{ slideEl.style.backgroundImage = `url("${filename}")`; };
+      img.onerror = ()=>{ slideEl.innerHTML = `<div class="missing">画像が見つからない：${filename}</div>`; };
+      img.src = filename + "?v=" + Date.now(); // キャッシュ事故回避
     }
-    for (let i = 0; i < slides.length; i++) {
-  if (!slides[i]) continue;
-  setSlideBackground(slides[i], images[i]);
-}
-
-
-    // ===== 動画：最初から大画面＆自動再生を試す（失敗したら手動OK） =====
-    const video = document.getElementById("bgVideo");
-    function safePlayVideo(){
-      video.muted = true;
-      const p = video.play();
-      if(p && typeof p.catch === "function") p.catch(()=>{ /* 自動再生ブロック時は何もしない */ });
+    for(let i=0;i<slides.length;i++){
+      if(!slides[i]) continue;
+      setSlideBackground(slides[i], images[i]);
     }
-    // 画面に入ったら再生（IntersectionObserver）
-    const io = new IntersectionObserver((entries)=>{
-      for(const ent of entries){
-        if(ent.isIntersecting) safePlayVideo();
+
+    // ===== 端まで行ったら最初に戻る（無限ループ風）=====
+    const gallery = document.getElementById("gallery");
+    let isJumping = false;
+
+    function maxScroll(){
+      return gallery.scrollWidth - gallery.clientWidth;
+    }
+
+    gallery.addEventListener("scroll", ()=>{
+      if(isJumping) return;
+      const left = gallery.scrollLeft;
+      const max = maxScroll();
+
+      // 最後 -> 最初
+      if(left >= max - 5){
+        isJumping = true;
+        setTimeout(()=>{
+          gallery.scrollTo({left:0, behavior:"smooth"});
+          isJumping = false;
+        }, 220);
       }
-    }, {threshold:0.35});
-    io.observe(page3);
+      // 最初 -> 最後（逆方向も）
+      if(left <= 0){
+        // 逆方向ループをしたい場合だけ有効（したくないならこのブロック削除OK）
+        // ここは「戻る方向でもループ」にしたいので残してる
+        isJumping = true;
+        setTimeout(()=>{
+          gallery.scrollTo({left:max, behavior:"smooth"});
+          isJumping = false;
+        }, 220);
+      }
+    });
 
-    // ===== 入場エフェクト：両斜めから紙吹雪（1回だけ） =====
+    // ===== 動画：操作不可を念押し =====
+    const v = document.getElementById("bgVideo");
+    if (v) {
+      v.controls = false;
+      v.disablePictureInPicture = true;
+      v.setAttribute("controlsList", "nodownload noplaybackrate noremoteplayback");
+    }
+
+    // ===== 入場エフェクト：両斜めから紙吹雪（1回だけ）=====
     const canvas = document.getElementById("confetti");
     const ctx = canvas.getContext("2d");
+
     function resizeConfetti(){
-      canvas.width = window.innerWidth * devicePixelRatio;
-      canvas.height = window.innerHeight * devicePixelRatio;
-      canvas.style.width = window.innerWidth + "px";
-      canvas.style.height = window.innerHeight + "px";
-      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      const dpr = devicePixelRatio || 1;
+      canvas.width = innerWidth * dpr;
+      canvas.height = innerHeight * dpr;
+      canvas.style.width = innerWidth + "px";
+      canvas.style.height = innerHeight + "px";
+      ctx.setTransform(dpr,0,0,dpr,0,0);
     }
-    window.addEventListener("resize", resizeConfetti);
+    addEventListener("resize", resizeConfetti);
     resizeConfetti();
 
     function burstConfetti(){
       canvas.style.display = "block";
-      const W = window.innerWidth;
-      const H = window.innerHeight;
+      const W = innerWidth, H = innerHeight;
       const pieces = [];
       const palette = ["#ff6b9a","#ffd1dc","#ffffff","#ffe6a7","#ff9ec4","#bfe3ff"];
-
-      function rand(a,b){ return a + Math.random()*(b-a); }
+      const rand = (a,b)=>a+Math.random()*(b-a);
 
       function addSide(side){
         const baseX = side==="L" ? -40 : W+40;
         const baseY = rand(H*0.25, H*0.65);
         for(let i=0;i<90;i++){
-          const vx = side==="L" ? rand(3.8,7.2) : rand(-7.2,-3.8);
-          const vy = rand(-6.8,-2.2);
-          const spin = rand(-0.22,0.22);
           pieces.push({
             x: baseX, y: baseY,
-            vx, vy,
+            vx: side==="L" ? rand(3.8,7.2) : rand(-7.2,-3.8),
+            vy: rand(-6.8,-2.2),
             g: rand(0.12,0.18),
             w: rand(6,12),
             h: rand(8,16),
             a: rand(0, Math.PI*2),
-            va: spin,
+            va: rand(-0.22,0.22),
             life: rand(90,150),
-            opacity: 1,
-            c: palette[Math.floor(Math.random()*palette.length)]
+            op: 1,
+            c: palette[(Math.random()*palette.length)|0]
           });
         }
       }
+      addSide("L"); addSide("R");
 
-      addSide("L");
-      addSide("R");
-
-      let frame = 0;
-      function tick(){
+      let frame=0;
+      (function tick(){
         frame++;
         ctx.clearRect(0,0,W,H);
         for(let i=pieces.length-1;i>=0;i--){
-          const p = pieces[i];
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vy += p.g;
-          p.a += p.va;
-          p.life--;
-
-          if(p.life < 40) p.opacity = p.life / 40;
+          const p=pieces[i];
+          p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.a+=p.va; p.life--;
+          if(p.life<40) p.op=p.life/40;
 
           ctx.save();
-          ctx.globalAlpha = Math.max(0, Math.min(1, p.opacity));
-          ctx.translate(p.x, p.y);
+          ctx.globalAlpha = Math.max(0, Math.min(1, p.op));
+          ctx.translate(p.x,p.y);
           ctx.rotate(p.a);
           ctx.fillStyle = p.c;
-          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
           ctx.restore();
 
-          if(p.life <= 0 || p.y > H+80) pieces.splice(i,1);
+          if(p.life<=0 || p.y>H+80) pieces.splice(i,1);
         }
-
-        if(pieces.length > 0 && frame < 220){
-          requestAnimationFrame(tick);
-        }else{
-          ctx.clearRect(0,0,W,H);
-          canvas.style.display = "none";
-        }
-      }
-      tick();
+        if(pieces.length>0 && frame<220) requestAnimationFrame(tick);
+        else { ctx.clearRect(0,0,W,H); canvas.style.display="none"; }
+      })();
     }
 
-    // 入場で1回だけ
     const onceKey = "confetti_once_done";
     if(!sessionStorage.getItem(onceKey)){
       sessionStorage.setItem(onceKey,"yes");
-      // ちょい遅らせて気持ちよく出す
       setTimeout(burstConfetti, 350);
     }
   </script>
