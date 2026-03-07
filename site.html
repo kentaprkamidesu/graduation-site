@@ -235,57 +235,7 @@
 	<div class="slide" id="slide8"></div>
 	<div class="slide" id="slide9"></div>
 	<div class="slide" id="slide10"></div>
-	<div class="slide" id="slide11"></div>
-	<div class="slide" id="slide12"></div>
-	<div class="slide" id="slide13"></div>
-	<div class="slide" id="slide14"></div>
-	<div class="slide" id="slide15"></div>
-	<div class="slide" id="slide16"></div>
-	<div class="slide" id="slide17"></div>
-	<div class="slide" id="slide18"></div>
-	<div class="slide" id="slide19"></div>
-	<div class="slide" id="slide20"></div>
-	<div class="slide" id="slide21"></div>
-	<div class="slide" id="slide22"></div>
-	<div class="slide" id="slide23"></div>
-	<div class="slide" id="slide24"></div>
-	<div class="slide" id="slide25"></div>
-<div class="slide" id="slide26"></div>
-<div class="slide" id="slide27"></div>
-<div class="slide" id="slide28"></div>
-<div class="slide" id="slide29"></div>
-<div class="slide" id="slide30"></div>
-<div class="slide" id="slide31"></div>
-<div class="slide" id="slide32"></div>
-<div class="slide" id="slide33"></div>
-<div class="slide" id="slide34"></div>
-<div class="slide" id="slide35"></div>
-<div class="slide" id="slide36"></div>
-<div class="slide" id="slide37"></div>
-<div class="slide" id="slide38"></div>
-<div class="slide" id="slide39"></div>
-<div class="slide" id="slide40"></div>
-<div class="slide" id="slide41"></div>
-<div class="slide" id="slide42"></div>
-<div class="slide" id="slide43"></div>
-<div class="slide" id="slide44"></div>
-<div class="slide" id="slide45"></div>
-<div class="slide" id="slide46"></div>
-<div class="slide" id="slide47"></div>
-<div class="slide" id="slide48"></div>
-<div class="slide" id="slide49"></div>
-<div class="slide" id="slide50"></div>
-<div class="slide" id="slide51"></div>
-<div class="slide" id="slide52"></div>
-<div class="slide" id="slide53"></div>
-<div class="slide" id="slide54"></div>
-<div class="slide" id="slide55"></div>
-<div class="slide" id="slide56"></div>
-<div class="slide" id="slide57"></div>
-<div class="slide" id="slide58"></div>
-<div class="slide" id="slide59"></div>
-<div class="slide" id="slide59"></div>
-<div class="slide" id="slide60"></div>
+
 
       </div>
       <div class="hintSwipe">← 横にスワイプすると写真が切り替わる →</div>
@@ -335,13 +285,7 @@
 
     // ===== 写真：背景に確実にセット（ファイル名はこの配列だけ）=====#-------------------------------------------------------------------------------------------------------------
     // 追加したい時はここに "main4.jpg" みたいに増やす
-    const images = ["main.jpg","main2.jpg","main3.jpg","main4.jpg","main5.jpg","main6.jpg","main7.jpg","main8.jpg","main9.jpg","main10.jpg","main11.jpg","main12.jpg","main13.jpg","main14.jpg","main15.jpg","main16.jpg","main17.jpg","main18.jpg","main19.jpg","main20.jpg","main21.jpg","main22.jpg","main23.jpg","main24.jpg","main25.jpg","main26.jpg","main27.jpg","main28.jpg","main29.jpg","main30.jpg",
-"main31.jpg","main32.jpg","main33.jpg","main34.jpg","main35.jpg",
-"main36.jpg","main37.jpg","main38.jpg","main39.jpg","main40.jpg",
-"main41.jpg","main42.jpg","main43.jpg","main44.jpg","main45.jpg",
-"main46.jpg","main47.jpg","main48.jpg","main49.jpg","main50.jpg",
-"main51.jpg","main52.jpg","main53.jpg","main54.jpg","main55.jpg",
-"main56.jpg","main57.jpg","main58.jpg","main59.jpg","main60.jpg"];
+    const images = ["main.jpg","main2.jpg","main3.jpg","main4.jpg","main5.jpg","main6.jpg","main7.jpg","main8.jpg","main9.jpg","main10.jpg"];
     const slides = [
       document.getElementById("slide1"),
       document.getElementById("slide2"),
@@ -352,57 +296,8 @@
       document.getElementById("slide7"),
       document.getElementById("slide8"),
       document.getElementById("slide9"),
-      document.getElementById("slide10"),
-      document.getElementById("slide11"),
-      document.getElementById("slide12"),
-      document.getElementById("slide13"),
-      document.getElementById("slide14"),
-      document.getElementById("slide15"),
-      document.getElementById("slide16"),
-      document.getElementById("slide17"),
-      document.getElementById("slide18"),
-      document.getElementById("slide19"),
-      document.getElementById("slide20"),
-      document.getElementById("slide21"),
-      document.getElementById("slide22"),
-      document.getElementById("slide23"),
-      document.getElementById("slide24"),
-      document.getElementById("slide25"),
-document.getElementById("slide26"),
-document.getElementById("slide27"),
-document.getElementById("slide28"),
-document.getElementById("slide29"),
-document.getElementById("slide30"),
-document.getElementById("slide31"),
-document.getElementById("slide32"),
-document.getElementById("slide33"),
-document.getElementById("slide34"),
-document.getElementById("slide35"),
-document.getElementById("slide36"),
-document.getElementById("slide37"),
-document.getElementById("slide38"),
-document.getElementById("slide39"),
-document.getElementById("slide40"),
-document.getElementById("slide41"),
-document.getElementById("slide42"),
-document.getElementById("slide43"),
-document.getElementById("slide44"),
-document.getElementById("slide45"),
-document.getElementById("slide46"),
-document.getElementById("slide47"),
-document.getElementById("slide48"),
-document.getElementById("slide49"),
-document.getElementById("slide50"),
-document.getElementById("slide51"),
-document.getElementById("slide52"),
-document.getElementById("slide53"),
-document.getElementById("slide54"),
-document.getElementById("slide55"),
-document.getElementById("slide56"),
-document.getElementById("slide57"),
-document.getElementById("slide58"),
-document.getElementById("slide59"),
-document.getElementById("slide60")
+     document.getElementById("slide10")
+     
     ];
 
     function setSlideBackground(slideEl, filename){
