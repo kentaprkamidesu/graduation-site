@@ -134,22 +134,32 @@
       -webkit-backdrop-filter:blur(10px);
     }
     .gallery{
-      display:flex;
-      overflow-x:auto;
-      scroll-snap-type:x mandatory;
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:none;
-      scroll-behavior:smooth;
-      touch-action: pan-y; /* 縦スクロールは生かす */
-    }
+  display:flex;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  scroll-behavior:smooth;
+
+  /* これが大事 */
+  touch-action: pan-x;
+}
+
+.gallery::-webkit-scrollbar{
+  display:none;
+}
     .gallery::-webkit-scrollbar{display:none;}
     .slide{
-      scroll-snap-align:start;
-      flex:0 0 100%;
-      height:min(74vh,560px);
-      position:relative;
-      background:#000 center/cover no-repeat;
-    }
+  scroll-snap-align:start;
+  flex:0 0 100%;
+  height:min(74vh,560px);
+  position:relative;
+  background:#000 center/cover no-repeat;
+
+  /* 追加 */
+  touch-action: pan-x;
+}
     .hintSwipe{
       text-align:center;
       padding:12px 14px;
@@ -417,6 +427,7 @@ document.getElementById("slide60")
     }
 
    // ===== 本物のループ：最後で「さらに同方向にスワイプ」した時だけ最初へ =====
+/*
 const gallery = document.getElementById("gallery");
 if (gallery) {
   const slideCount = gallery.querySelectorAll(".slide").length;
@@ -426,7 +437,7 @@ if (gallery) {
     const w = getSlideWidth() || 1;
     return Math.round(gallery.scrollLeft / w);
   };
-
+*/
   const goIndex = (i) => {
     const w = getSlideWidth() || 1;
     gallery.scrollTo({ left: i * w, behavior: "smooth" });
