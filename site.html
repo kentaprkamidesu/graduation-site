@@ -68,6 +68,7 @@
       position:relative;
       z-index:2;
     }
+
     .mini{
       display:inline-block;
       padding:8px 14px;
@@ -197,6 +198,63 @@
       letter-spacing:.08em;
       background:repeating-linear-gradient(45deg,#fff,#fff 10px,#f3f3f3 10px,#f3f3f3 20px);
     }
+/* 1ページ目のカレンダー画像たち */
+#page1{
+  position: relative;
+  overflow: hidden;
+}
+
+#calendarWall{
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* 1枚1枚のカレンダー画像 */
+.calItem{
+  position: absolute;
+  width: 95px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,.16));
+  opacity: 0.96;
+}
+
+/* 真ん中のカードは前面 */
+.heroCard{
+  position: relative;
+  z-index: 3;
+}
+.mini,
+.heroLine,
+.bigZeroWrap,
+.subNote,
+.scrollBtn{
+  position: relative;
+  z-index: 6;
+}
+/* 手書きイラスト */
+.doodle{
+  position: absolute;
+  z-index: 5;
+  width: 120px;
+  height: auto;
+  pointer-events: none;
+  object-fit: contain;
+}
+
+/* 左の絵 */
+.doodleLeft{
+  left: 340px;
+  top: 235px;
+}
+
+/* 右の絵 */
+.doodleRight{
+  right: 334px;
+  top: 220px;
+}
   </style>
 </head>
 
@@ -206,8 +264,10 @@
 
   <!-- 1ページ目 -->
   <section class="page" id="page1">
-    <div class="heroCard">
+    <div id="calendarWall"></div>
+	<div class="heroCard">
       <div class="mini">GRADUATION COUNTDOWN</div>
+
       <div class="heroLine">卒業まで、、、あと</div>
       <div class="bigZeroWrap">
         <div class="bigZero" id="daysLeft">0</div>
@@ -216,9 +276,11 @@
       <div class="subNote" id="dateNote">卒業日：----</div>
 
       <div class="scrollBtn" id="toPage2" role="button" tabindex="0">
-        <span class="arrow">↓</span><span>スクロールして写真へ</span>
+        <span class="arrow">↓</span><span></span>
       </div>
     </div>
+<img src="left-doodle.png" class="doodle doodleLeft" alt="">
+<img src="right-doodle.png" class="doodle doodleRight" alt="">
   </section>
 
   <!-- 2ページ目（横スワイプ写真） -->#--------------------------学級通信から拾ってきているためほとんどの写真がぼやけています
@@ -242,7 +304,7 @@
     </div>
 
     <div class="scrollBtn" id="toPage3" role="button" tabindex="0" style="margin-top:18px;">
-      <span class="arrow">↓</span><span>次へ</span>
+      <span class="arrow">↓</span><span></span>
     </div>
   </section>
 
@@ -469,6 +531,74 @@ if (gallery) {
       sessionStorage.setItem(onceKey,"yes");
       setTimeout(burstConfetti, 350);
     }
+// ===== 1ページ目にカレンダー画像を敷き詰める =====
+const calendarWall = document.getElementById("calendarWall");
+
+const calendarImages = [
+  "cal1.png","cal2.png","cal3.png","cal4.png","cal5.png",
+  "cal6.png","cal7.png","cal8.png","cal9.png","cal10.png",
+  "cal11.png","cal12.png","cal13.png","cal14.png","cal15.png",
+  "cal16.png","cal17.png","cal18.png","cal19.png","cal20.png",
+  "cal21.png","cal22.png","cal23.png"
+];
+// 配置場所（中央を避ける）
+const positions = [
+  /* ===== 左上 ===== */
+  {top:"5%",  left:"2%",  rotate:"-6deg"},
+  {top:"7%",  left:"13%", rotate:"4deg"},
+  {top:"6%",  left:"27%", rotate:"-5deg"},
+
+  /* ===== 右上 ===== */
+  {top:"5%",  left:"63%", rotate:"3deg"},
+  {top:"6%",  left:"77%", rotate:"-4deg"},
+  {top:"5%",  left:"89%", rotate:"5deg"},
+
+  /* ===== 左中 ===== */
+  {top:"22%", left:"1%",  rotate:"-4deg"},
+  {top:"28%", left:"12%", rotate:"3deg"},
+
+  /* ===== 右中 ===== */
+  {top:"22%", left:"82%", rotate:"-3deg"},
+  {top:"30%", left:"91%", rotate:"4deg"},
+
+  /* ===== 左下 ===== */
+  {top:"66%", left:"2%",  rotate:"3deg"},
+  {top:"73%", left:"14%", rotate:"-5deg"},
+  {top:"78%", left:"28%", rotate:"4deg"},
+
+  /* ===== 右下 ===== */
+  {top:"67%", left:"67%", rotate:"-4deg"},
+  {top:"72%", left:"80%", rotate:"3deg"},
+  {top:"76%", left:"91%", rotate:"-3deg"},
+
+  /* ===== 左の内側（でも中央には入れない） ===== */
+  {top:"44%", left:"4%",  rotate:"2deg"},
+  {top:"52%", left:"17%", rotate:"-4deg"},
+
+  /* ===== 右の内側（でも中央には入れない） ===== */
+  {top:"45%", left:"78%", rotate:"4deg"},
+  {top:"53%", left:"90%", rotate:"-2deg"},
+
+  /* ===== 左下寄り ===== */
+  {top:"84%", left:"8%",  rotate:"2deg"},
+  {top:"86%", left:"21%", rotate:"-3deg"},
+
+  /* ===== 右下寄り ===== */
+  {top:"84%", left:"74%", rotate:"3deg"},
+  {top:"86%", left:"87%", rotate:"-4deg"}
+];
+
+calendarImages.forEach((src, i) => {
+  if (!positions[i]) return;
+
+  const img = document.createElement("img");
+  img.src = src;
+  img.className = "calItem";
+  img.style.top = positions[i].top;
+  img.style.left = positions[i].left;
+  img.style.transform = `rotate(${positions[i].rotate})`;
+  calendarWall.appendChild(img);
+});
   </script>
 </body>
 </html>
