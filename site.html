@@ -135,22 +135,26 @@
       -webkit-backdrop-filter:blur(10px);
     }
     .gallery{
-      display:flex;
-      overflow-x:auto;
-      scroll-snap-type:x mandatory;
-      -webkit-overflow-scrolling:touch;
-      scrollbar-width:none;
-      scroll-behavior:smooth;
-      touch-action: pan-y; /* 縦スクロールは生かす */
-    }
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+.gallery::-webkit-scrollbar{
+  display: none;
+}
     .gallery::-webkit-scrollbar{display:none;}
-    .slide{
-      scroll-snap-align:start;
-      flex:0 0 100%;
-      height:min(74vh,560px);
-      position:relative;
-      background:#000 center/cover no-repeat;
-    }
+   .slide{
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  position: relative;
+  background: #000 center / cover no-repeat;
+  height: min(74vh, 560px);
+}
     .hintSwipe{
       text-align:center;
       padding:12px 14px;
